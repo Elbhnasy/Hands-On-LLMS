@@ -1,0 +1,9 @@
+pydantic-settings == 2.9.1
+openai == 1.76.2
+langchain-community == 0.3.23
+langchain == 0.3.24
+python-dotenv == 1.1.0
+transformers == 4.51.3
+sentencepiece == 0.2.0
+accelerate == 1.6.0
+bitsandbytes == 0.45.5
