@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     # OpenAI API key
     OPENAI_API_KEY: Optional[str] = None 
     LLM_MODEL: Optional[str] = "gpt-4o-mini"
+    MODEL_ID1 : Optional[str]
+    MODEL_ID2 : Optional[str]
+
 
     class Config:
         env_file = ".env"

@@ -7,3 +7,5 @@ transformers == 4.51.3
 sentencepiece == 0.2.0
 accelerate == 1.6.0
 bitsandbytes == 0.45.5
+langchain-openai == 0.3.14
+langchain-huggingface == 0.1.2
