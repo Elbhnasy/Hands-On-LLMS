@@ -1,0 +1,3 @@
+Hello, this is an example text file.
+It contains multiple lines of text.
+This is the third line.
