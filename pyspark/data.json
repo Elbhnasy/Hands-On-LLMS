@@ -1,0 +1,142 @@
+{
+    "menu": {
+        "Caramel Latte": {
+            "ingredients": [
+                "espresso",
+                "steamed milk",
+                "caramel syrup"
+            ],
+            "nutrition": {
+                "calories": 250,
+                "sugar_g": 28
+            },
+            "price_usd": 3.75
+        },
+        "Matcha Latte": {
+            "ingredients": [
+                "matcha",
+                "milk",
+                "vanilla syrup"
+            ],
+            "nutrition": {
+                "calories": 180,
+                "sugar_g": 21
+            },
+            "price_usd": 3.4
+        },
+        "Espresso": {
+            "ingredients": [
+                "espresso"
+            ],
+            "nutrition": {
+                "calories": 5,
+                "sugar_g": 0
+            },
+            "price_usd": 2.52
+        },
+        "Iced Americano": {
+            "ingredients": [
+                "espresso",
+                "cold water",
+                "ice"
+            ],
+            "nutrition": {
+                "calories": 10,
+                "sugar_g": 0
+            },
+            "price_usd": 2.55
+        },
+        "Vanilla Cold Brew": {
+            "ingredients": [
+                "cold brew coffee",
+                "vanilla syrup",
+                "milk"
+            ],
+            "nutrition": {
+                "calories": 120,
+                "sugar_g": 14
+            },
+            "price_usd": 3.1
+        },
+        "Chai Latte": {
+            "ingredients": [
+                "chai tea",
+                "milk",
+                "cinnamon"
+            ],
+            "nutrition": {
+                "calories": 190,
+                "sugar_g": 23
+            },
+            "price_usd": 3.45
+        },
+        "Mocha": {
+            "ingredients": [
+                "espresso",
+                "chocolate syrup",
+                "steamed milk"
+            ],
+            "nutrition": {
+                "calories": 300,
+                "sugar_g": 32
+            },
+            "price_usd": 4.0
+        },
+        "Flat White": {
+            "ingredients": [
+                "espresso",
+                "steamed milk"
+            ],
+            "nutrition": {
+                "calories": 120,
+                "sugar_g": 10
+            },
+            "price_usd": 3.1
+        },
+        "Iced Latte": {
+            "ingredients": [
+                "espresso",
+                "milk",
+                "ice"
+            ],
+            "nutrition": {
+                "calories": 130,
+                "sugar_g": 12
+            },
+            "price_usd": 3.15
+        },
+        "Hot Chocolate": {
+            "ingredients": [
+                "milk",
+                "cocoa powder",
+                "sugar"
+            ],
+            "nutrition": {
+                "calories": 250,
+                "sugar_g": 30
+            },
+            "price_usd": 3.75
+        }
+    },
+    "drinks": [
+        "Caramel Latte",
+        "Matcha Latte",
+        "Espresso",
+        "Iced Americano",
+        "Vanilla Cold Brew",
+        "Chai Latte",
+        "Mocha",
+        "Flat White",
+        "Iced Latte",
+        "Hot Chocolate"
+    ],
+    "opening_hours": {
+        "Monday": "8:00 AM - 8:00 PM",
+        "Tuesday": "8:00 AM - 8:00 PM",
+        "Wednesday": "8:00 AM - 8:00 PM",
+        "Thursday": "8:00 AM - 10:00 PM",
+        "Friday": "8:00 AM - 10:00 PM",
+        "Saturday": "9:00 AM - 10:00 PM",
+        "Sunday": "9:00 AM - 6:00 PM"
+    }
+}
