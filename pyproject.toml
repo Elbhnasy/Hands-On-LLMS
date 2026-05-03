@@ -16,3 +16,8 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "wikipedia>=1.4.0",
 ]
+
+[tool.uv.workspace]
+members = [
+    "MCP",
+]
