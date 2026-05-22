@@ -1,26 +1,67 @@
 # Hands-On-LLMS
-**Hands-On-LLMS* is a curated, hands-on learning repository that documents my personal study path through the rapidly evolving landscape of large language model (LLM) tooling.
 
----
+Hands-On-LLMS is a hands-on learning repository that documents practical experiments with large language model tooling, agent workflows, and supporting data pipelines. Most content lives in notebooks, with a few small Python scripts that demonstrate configuration patterns and client setup.
 
-## 🎯 Purpose  
-To document my hands-on journey through modern LLM ecosystems, capturing insights, and breakthroughs as I work with each tool.
+## Repository map
 
----
-## 🔧 Tools Covered  
-- **LangChain**: Building and chaining prompts, agents, and RAG pipelines for retrieval-augmented workflows.  
-- **Langraph**: Constructing and querying graph-based knowledge structures driven by an LLM.  
-- **Unsloth**: Benchmarking and optimizing fine-tuning and inference performance across backends.  
-- **LiveKit**: Integrating real-time audio/video streams for interactive, multimodal LLM demos.  
-- **Ollama**: Running and managing open-source LLMs locally, experimenting with versioning and on-prem scaling.
+| Path | Focus |
+| --- | --- |
+| [01-LangChain](01-LangChain) | Introductory LangChain notebooks and patterns. |
+| [Articles](Articles) | Background reading and comparisons. |
+| [langgraph](langgraph) | LangGraph examples, including debugging flows. |
+| [MCP](MCP) | Model Context Protocol client/server examples and walkthrough. |
+| [notebooks](notebooks) | General experiments and prompt templates. |
+| [pyspark](pyspark) | Data processing examples with Spark. |
+| [src](src) | Helper utilities, configuration, and script prototypes. |
+| [transformers](transformers) | Fine-tuning and training workflow notebooks. |
 
----
-| Parameter           | Purpose                                         | Affects Input or Output | Description                                                                 |
-|---------------------|-------------------------------------------------|-------------------------|-----------------------------------------------------------------------------|
-| `temperature`       | Controls randomness in text generation          | Output                  | Higher values (e.g., 1.0) make output more random; lower values (e.g., 0.2) make it more deterministic. Typical range: 0.0 to 2.0. |
-| `top_p`             | Controls diversity via nucleus sampling         | Output                  | Selects tokens whose cumulative probability is at least `top_p` (e.g., 0.9 = top 90%), balancing diversity and relevance in output. |
-| `top_k`             | Limits sampling to top K probable tokens        | Output                  | Randomly samples from the top K most probable tokens for the next token, ensuring focused output. |
-| `seed`              | Enables reproducible text generation            | Output                  | Sets a random seed for reproducible outputs when using the same parameters and input. Ensures consistency across runs. |
-| `repetition_penalty`| Reduces repeated tokens in output               | Output                  | Values >1.0 discourage repeated tokens; values <1.0 encourage repetition (rarely used). Typical values >1.0 reduce redundancy in output. |
-| `num_predict`       | Limits length of generated response             | Output                  | Caps the generated response to this number of tokens, potentially truncating longer outputs. |
-| `num_ctx`           | Sets context window for input and output        | Input + Output          | Sets the maximum number of tokens (input + output) in the context window, determining how much conversation history and response the model can process. |
+## Getting started
+
+### Prerequisites
+- Python 3.14 or newer
+- uv installed
+
+### Install dependencies
+
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -r src/requirements.txt
+```
+
+### Environment configuration
+
+Settings are loaded from a local `.env` file (see [src/helpers/config.py](src/helpers/config.py)). At minimum, set your API key and model identifiers as needed:
+
+```bash
+OPENAI_API_KEY=your_key_here
+LLM_MODEL=your_model_name
+MODEL_ID2=optional_secondary_model
+OLLAMA_API_GENERATION=http://localhost:11434/api/generate
+OLLAMA_API_CHAT=http://localhost:11434/api/chat
+```
+
+The Ollama endpoints above match the defaults used by the settings class and can be omitted if unchanged.
+
+## Usage
+
+### Notebooks
+Open the notebooks in VS Code or Jupyter and run them cell-by-cell. Most experiments are organized by folder in the repository map above.
+
+### MCP example
+The [MCP](MCP) folder contains a minimal client/server setup showing how to expose tools and connect them to a LangChain agent. See [MCP/README.md](MCP/README.md) for the walkthrough and transport details.
+
+### Scripts
+The root [main.py](main.py) is a placeholder entry point. The [src/main.py](src/main.py) script contains a partial OpenAI client setup and is a starting point for expanding scripted workflows.
+
+## LLM parameter reference
+
+| Parameter | Purpose | Affects Input or Output | Description |
+| --- | --- | --- | --- |
+| `temperature` | Controls randomness in generation | Output | Higher values increase variability; lower values make output more deterministic. Typical range: 0.0 to 2.0. |
+| `top_p` | Nucleus sampling threshold | Output | Samples from the smallest token set whose cumulative probability reaches `top_p`. |
+| `top_k` | Limits sampling to top K tokens | Output | Restricts the candidate tokens to the top K probabilities before sampling. |
+| `seed` | Enables reproducible generation | Output | Sets a random seed for deterministic outputs when other parameters match. |
+| `repetition_penalty` | Reduces repeated tokens | Output | Values above 1.0 discourage repetition; values below 1.0 encourage it. |
+| `num_predict` | Caps response length | Output | Limits the number of generated tokens. |
+| `num_ctx` | Sets context window size | Input + Output | Maximum tokens available for the combined prompt and response. |
