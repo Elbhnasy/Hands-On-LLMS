@@ -1,15 +1,3 @@
----
-tags:
-  - machine-learning
-  - reinforcement-learning
-  - policy-gradient
-  - REINFORCE
-aliases:
-  - RL Foundations
-  - Policy Gradient Notes
-created: 2025-05-27
----
-
 # Reinforcement Learning (RL) Foundations
 
 ## Table of Contents
