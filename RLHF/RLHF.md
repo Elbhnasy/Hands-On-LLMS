@@ -30,6 +30,43 @@ created: 2025-05-27
 - [[#5. Core Challenges Why is RL Hard?]]
 - [[#6. General Model-Free RL Interaction Framework]]
 
+
+
+## Course Map: README ↔ Notebook
+
+Use this map to jump directly from each README topic to the matching notebook section.
+
+| README Topic | Notebook Reference | Status |
+|---|---|---|
+| Reinforcement Learning (RL) Foundations | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| Table of Contents | 📓 Notebook → [RL for LLMs: From RLHF to RLVR] (theory) | Explicit |
+| 1. Core Framework & Paradigm Shift | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| 2. Intuition: Learning from Trajectories | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| 3. Mathematical Objective Function | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (math) | Explicit |
+| 4. The REINFORCE Algorithm | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| 5. Core Challenges: Why is RL Hard? | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| 6. General Model-Free RL Interaction Framework | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (theory) | Explicit |
+| Formal MDP Definition | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| Formalizing the RL Problem: The Objective | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (math) / 📓 Notebook → [Section 5 — DPO: Direct Preference Optimization] (math) | Explicit |
+| 7. Introduction to RLHF | 📓 Notebook → [RL for LLMs: From RLHF to RLVR] (theory), 📓 Notebook → [Section 3 — Training the Reward Model] (theory), 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (theory), 📓 Notebook → [Section 5 — DPO: Direct Preference Optimization] (theory), 📓 Notebook → [Section 6 — GRPO with verifiable rewards (RLVR)] (theory) | Explicit |
+| 8. Formulating Language Modeling as an MDP | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (theory / math) | Explicit |
+| 9. Defining the Reward: Human Preferences | 📓 Notebook → [Section 3 — Training the Reward Model] (theory / code) | Explicit |
+| 11. RLHF with REINFORCE Pseudo-code | [NO NOTEBOOK CELL — decide: add cell or mark as out of scope] | Missing |
+| 12. RLHF with PPO/GRPO Pseudo-code | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (theory / math / code), 📓 Notebook → [Section 6 — GRPO with verifiable rewards (RLVR)] (code) | Explicit |
+| 13. RLHF Empirical Results: Exceeding Scale via Alignment | 📓 Notebook → [Section 8 — Comparison: All Methods Side by Side] (code / viz) | Explicit (course experiment results) |
+| 14. The Evolution of Modern RLHF | 📓 Notebook → [Section 5 — DPO: Direct Preference Optimization] (theory), 📓 Notebook → [Section 6 — GRPO with verifiable rewards (RLVR)] (theory), 📓 Notebook → [Section 7 — RLVR: Improving the reward] (theory) | Explicit |
+| 15. RLHF with DPO (Direct Preference Optimization) | 📓 Notebook → [Section 5 — DPO: Direct Preference Optimization] (theory / math / code) | Explicit |
+| 16. Architectural Comparison: PPO vs. DPO | 📓 Notebook → [Section 4 — GRPO+RM: RL with the learned reward model] (theory / math), 📓 Notebook → [Section 5 — DPO: Direct Preference Optimization] (theory / math) | Explicit |
+| 17. RL with Verifiable Rewards (RLVR) | 📓 Notebook → [Section 6 — GRPO with verifiable rewards (RLVR)] (theory / code / viz), 📓 Notebook → [Section 7 — RLVR: Improving the reward] (theory / code) | Explicit |
+
+### Notebook topics currently missing from README narrative
+
+- [ADD TO README — missing topic: Section 0 Setup + model/tokenizer/dataset pipeline]
+- [ADD TO README — missing topic: Section 1 Baseline zero-shot evaluation protocol]
+- [ADD TO README — missing topic: Quantization + LoRA memory rationale in practical training]
+- [ADD TO README — missing topic: Evaluation helper design (`extract_predicted_answer`, accuracy pipeline)]
+- [ADD TO README — missing topic: Section 8 side-by-side comparison and final bar chart]
+
 ---
 
 ## 1. Core Framework & Paradigm Shift
@@ -342,38 +379,6 @@ $$\nabla_\theta J(\theta) \approx \frac{1}{m} \sum_{i=1}^{m=K} \left[ \Big( \nab
 * **Batch Sizing ($m=K$):** The number of trajectory samples $m$ tracked in standard reinforcement learning matches the number of generated response rollouts $K$ sampled for each prompt string.
 * **The Return Factor ($r(s_i, a_i)$):** The total discounted trajectory reward $\sum \gamma^t r_t$ simplifies entirely into a single scalar value evaluation output by the proxy reward model for that unique prompt-completion pairing.
 
-## 11. RLHF with REINFORCE Pseudo-code
-
-### The Operational Training Loop
-Once the reward model $f_r$ is trained, it is used to provide feedback to optimize the policy. The training routine scales the foundational vanilla REINFORCE policy gradient algorithm to language generation tasks:
-
-**Step 1 — Initialization & Freezing Environment Components**
-* Freeze $\pi_{\text{SFT}}$ to preserve a static copy of our original model (used as a reference network to calculate potential KL divergence penalties).
-* Freeze the reward model $f_r$ to prevent it from suffering from distribution drift during generation steps.
-* Set the active policy $\pi = \pi_{\text{SFT}}$ as our starting weights initialization.
-
-**Step 2 — The Rollout & Optimization Loop**
-* Loop over the dataset of prompts (which serve as the environment states $s$).
-	* For each prompt $s$, use the policy network to sample $K$ completions: $a_k \sim \pi$.
-	* Pass each generated answer to the frozen reward model to get its scalar feedback score: $r_k = f_r(s, a_k)$.
-	* Construct a mini-batch consisting of $\{(s, a_k, r_k)\}_{k=1}^{K}$ elements.
-	* Compute the policy gradient update via **REINFORCE** to adjust the weights of the policy network $\pi$.
-
----
-
-### The One-Step REINFORCE Policy Gradient
-Because the model acts as a *one-step MDP* (treating the full textual answer sequence as a single monolithic action), the time horizon reduces down to $T=1$. 
-
-The empirical gradient estimation translates mathematically to:
-
-$$\nabla_\theta J(\theta) \approx \frac{1}{m} \sum_{i=1}^{m=K} \left[ \Big( \nabla_\theta \log \pi_\theta(a_{i} \mid s_{i}) \Big) \cdot r(s_{i}, a_{i}) \right]$$
-
-#### Analytical Breakdown of the One-Step Reduction
-* **The Summation Limit Collapse ($T=1$):** As highlighted in the lecture slides, the standard multi-step trajectory summation markers $\sum_{t=1}^T$ are collapsed down strictly to $T=1$. The gradient is evaluated once across the log-probability of the whole sequence instead of averaging individual token choices across a long timeline.
-* **Batch Sizing ($m=K$):** The number of trajectory samples $m$ tracked in standard reinforcement learning matches the number of generated response rollouts $K$ sampled for each prompt string.
-* **The Return Factor ($r(s_i, a_i)$):** The total discounted trajectory reward $\sum \gamma^t r_t$ simplifies entirely into a single scalar value evaluation output by the proxy reward model for that unique prompt-completion pairing.
-  
-  
 ## 12. RLHF with PPO/GRPO Pseudo-code
 
 ### Shifting Beyond Vanilla REINFORCE
