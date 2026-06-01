@@ -295,7 +295,7 @@ Because the reward model typically evaluates the complete generated response $a$
 
 The mathematical goal is to maximize the expected reward while penalizing deviations from the original stable model:
 
-$$\pi^* = \arg\max_\pi \mathbb{E}_{\pi} [r(s, a)] - \beta \, \mathbb{D}_{\text{KL}}(\pi \parallel \pi_{\text{SFT}})$$
+$$\pi^{*} = \arg\max_\pi \mathbb{E}_{\pi} [r(s, a)] - \beta \, \mathbb{D}_{\text{KL}}(\pi \parallel \pi_{\text{SFT}})$$
 
 #### Intuition Behind the Formula
 * **$\mathbb{E}_{\pi} [r(s, a)]$ (The Reward Term):** Encourages the policy $\pi$ to generate responses that achieve a high alignment score from the human preference reward model.
@@ -330,7 +330,7 @@ For an MDP $(S, A, P, R, \gamma, T)$, the agent's goal is to **learn a policy th
 
 ### The Expected Discounted Return
 
-$$\pi^* = \arg\max_\pi \mathbb{E} \left[ \sum_{t=1}^T \gamma^t \, r_t \right] = J(\pi)$$
+$$\pi^{*} = \arg\max_\pi \mathbb{E} \left[ \sum_{t=1}^T \gamma^t \, r_t \right] = J(\pi)$$
 
 Where the reward at each step is defined as:
 
@@ -338,7 +338,7 @@ $$r_t = R(s_t, a_t, s_{t+1})$$
 
 ### Key Properties of the Optimal Policy
 
-- The **optimal policy $\pi^*$** achieves the maximum expected return from every state.
+- The **optimal policy $\pi^{*}$** achieves the maximum expected return from every state.
 - It represents the **best possible way to behave** within the given environment.
 
 > [!INFO] Understanding the Discount Factor ($\gamma$)
@@ -529,9 +529,9 @@ $$\max_\pi \mathbb{E}_{x \sim \mathcal{D}, y \sim \pi(y \mid x)} \left[ r(x, y) 
 
 #### 2. The Closed-Form Optimal Policy
 
-From prior theoretical work, the mathematical optimization problem above has a known exact optimal policy solution ($\pi^*$) expressed as a function of the ground-truth reward:
+From prior theoretical work, the mathematical optimization problem above has a known exact optimal policy solution ($\pi^{*}$) expressed as a function of the ground-truth reward:
 
-$$\pi^*(y \mid x) = \frac{1}{Z(x)} \pi_{\text{ref}}(y \mid x) \exp \left( \frac{1}{\beta} r(x, y) \right)$$
+$$\pi^{*}(y \mid x) = \frac{1}{Z(x)} \pi_{\text{ref}}(y \mid x) \exp \left( \frac{1}{\beta} r(x, y) \right)$$
 
 Where $Z(x)$ is the partition function (or normalizing constant):
 
@@ -542,9 +542,9 @@ $$Z(x) = \sum_{y} \pi_{\text{ref}}(y \mid x) \exp \left( \frac{1}{\beta} r(x, y)
 
 #### 3. Rearranging to Eliminate the Partition Function
 
-By taking the log of the optimal policy equation and isolating the reward term, we can express the implicit reward function $r(x, y)$ purely in terms of the optimal policy ($\pi^*$), the reference policy ($\pi_{\text{ref}}$), and the partition function ($Z(x)$):
+By taking the log of the optimal policy equation and isolating the reward term, we can express the implicit reward function $r(x, y)$ purely in terms of the optimal policy ($\pi^{*}$), the reference policy ($\pi_{\text{ref}}$), and the partition function ($Z(x)$):
 
-$$r(x, y) = \beta \log \frac{\pi^*(y \mid x)}{\pi_{\text{ref}}(y \mid x)} + \beta \log Z(x)$$
+$$r(x, y) = \beta \log \frac{\pi^{*}(y \mid x)}{\pi_{\text{ref}}(y \mid x)} + \beta \log Z(x)$$
 
 * **The Policy Log Ratio:** This term evaluates whether the active policy likes a response more than the reference model (yielding a positive ratio) or less than the reference model (yielding a negative ratio).
 
@@ -554,9 +554,9 @@ $$r(x, y) = \beta \log \frac{\pi^*(y \mid x)}{\pi_{\text{ref}}(y \mid x)} + \bet
 
 Because the pairwise human preference dataset only cares about the relative reward margin between a winning response ($y^w$) and a losing response ($y^l$), we substitute our rearranged reward equation directly into the margin formula:
 
-$$r(x, y^w) - r(x, y^l) = \left( \beta \log \frac{\pi^*(y^w \mid x)}{\pi_{\text{ref}}(y^w \mid x)} + \beta \log Z(x) \right) - \left( \beta \log \frac{\pi^*(y^l \mid x)}{\pi_{\text{ref}}(y^l \mid x)} + \beta \log Z(x) \right)$$
+$$r(x, y^w) - r(x, y^l) = \left( \beta \log \frac{\pi^{*}(y^w \mid x)}{\pi_{\text{ref}}(y^w \mid x)} + \beta \log Z(x) \right) - \left( \beta \log \frac{\pi^{*}(y^l \mid x)}{\pi_{\text{ref}}(y^l \mid x)} + \beta \log Z(x) \right)$$
 
-$$r(x, y^w) - r(x, y^l) = \beta \log \frac{\pi^*(y^w \mid x)}{\pi_{\text{ref}}(y^w \mid x)} - \beta \log \frac{\pi^*(y^l \mid x)}{\pi_{\text{ref}}(y^l \mid x)}$$
+$$r(x, y^w) - r(x, y^l) = \beta \log \frac{\pi^{*}(y^w \mid x)}{\pi_{\text{ref}}(y^w \mid x)} - \beta \log \frac{\pi^{*}(y^l \mid x)}{\pi_{\text{ref}}(y^l \mid x)}$$
 
 $$\text{Loss}_{\text{DPO}}(\pi_\theta) = - \mathbb{E}_{(x, y^w, y^l) \sim \mathcal{D}} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y^w \mid x)}{\pi_{\text{ref}}(y^w \mid x)} - \beta \log \frac{\pi_\theta(y^l \mid x)}{\pi_{\text{ref}}(y^l \mid x)} \right) \right]$$
 
