@@ -7,6 +7,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 import asyncio
+import sys
+from pathlib import Path
+
+# Resolve the Math server next to this file so the path does not depend on the
+# current working directory.
+MATH_SERVER = str(Path(__file__).resolve().parent / "mathservr.py")
 
 async def main():
     client = MultiServerMCPClient(
@@ -17,8 +23,10 @@ async def main():
             },
             "Math": {
                 "transport": "stdio",
-                "command": "python",
-                "args": ["mathservr.py"],
+                # Use the current interpreter (which has `mcp` installed) instead
+                # of bare "python", which may be missing or point elsewhere.
+                "command": sys.executable,
+                "args": [MATH_SERVER],
             },
         }
     )
